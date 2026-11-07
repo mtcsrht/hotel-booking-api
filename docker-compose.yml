@@ -1,0 +1,48 @@
+services:
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: hotel_booking
+      POSTGRES_USER: hotel_booking
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-hotel_booking}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      # postgres:18 keeps PGDATA in a versioned subdirectory, so mount the parent.
+      - pgdata:/var/lib/postgresql
+      # Runs in filename order, only when the volume is empty.
+      - ./database/ddl:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      # TCP on purpose: the init-time server is socket-only, so this passes only after DDL ran.
+      test: ["CMD-SHELL", "pg_isready -h localhost -U hotel_booking -d hotel_booking"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  redis:
+    image: redis:8
+    ports:
+      - "127.0.0.1:${REDIS_PORT:-6379}:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  backend:
+    build: ./backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/hotel_booking
+      SPRING_DATASOURCE_USERNAME: hotel_booking
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-hotel_booking}
+      SPRING_DATA_REDIS_HOST: redis
+    ports:
+      - "127.0.0.1:${BACKEND_PORT:-8080}:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+volumes:
+  pgdata:
