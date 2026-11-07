@@ -1,0 +1,74 @@
+CREATE TYPE room_type AS ENUM (
+  'SINGLE',
+  'DOUBLE',
+  'TWIN',
+  'SUITE',
+  'FAMILY'
+);
+
+CREATE TYPE user_role AS ENUM (
+  'GUEST',
+  'HOTEL_MANAGER',
+  'ADMIN'
+);
+
+CREATE TYPE staff_role AS ENUM (
+  'OWNER',
+  'MANAGER',
+  'RECEPTIONIST'
+);
+
+CREATE TYPE hotel_status AS ENUM (
+  'DRAFT',
+  'PENDING_APPROVAL',
+  'PUBLISHED',
+  'REJECTED',
+  'SUSPENDED'
+);
+
+CREATE TYPE booking_status AS ENUM (
+  'PENDING',
+  'CONFIRMED',
+  'CANCELLED',
+  'EXPIRED',
+  'COMPLETED',
+  'NO_SHOW'
+);
+
+CREATE TYPE payment_type AS ENUM (
+  'CHARGE',
+  'REFUND'
+);
+
+CREATE TYPE payment_status AS ENUM (
+  'INITIATED',
+  'SUCCEEDED',
+  'FAILED'
+);
+
+CREATE TYPE discount_type AS ENUM (
+  'PERCENT',
+  'FIXED_AMOUNT'
+);
+
+CREATE TYPE amenity_scope AS ENUM (
+  'HOTEL',
+  'ROOM',
+  'BOTH'
+);
+
+CREATE TYPE login_result AS ENUM (
+  'SUCCESS',
+  'BAD_CREDENTIALS',
+  'UNKNOWN_EMAIL',
+  'ACCOUNT_LOCKED',
+  'EMAIL_NOT_VERIFIED'
+);
+
+CREATE TYPE email_status AS ENUM (
+  'PENDING',
+  'SENDING',
+  'SENT',
+  'FAILED',
+  'CANCELLED'
+);
