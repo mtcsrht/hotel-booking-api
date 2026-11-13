@@ -36,6 +36,8 @@ services:
       SPRING_DATASOURCE_USERNAME: hotel_booking
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-hotel_booking}
       SPRING_DATA_REDIS_HOST: redis
+      # No default on purpose: backend refuses to start if blank or under 32 bytes.
+      JWT_SECRET: ${JWT_SECRET}
     ports:
       - "127.0.0.1:${BACKEND_PORT:-8080}:8080"
     depends_on:
